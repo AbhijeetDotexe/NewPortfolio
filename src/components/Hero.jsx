@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import {
   FaHtml5,
   FaCss3Alt,
@@ -7,13 +8,30 @@ import {
   FaServer,
   FaDatabase,
   FaAws,
-  // FaNginx,
-  // FaRedis,
   FaGitAlt,
   FaGithub,
   FaReact,
 } from "react-icons/fa";
 import NetworkAnimation from "./NetworkAnimation";
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      delayChildren: 0.3,
+      staggerChildren: 0.2,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+  },
+};
 
 function Hero() {
   const skills = [
@@ -24,27 +42,49 @@ function Hero() {
     { name: "Express", icon: FaServer },
     { name: "MongoDB", icon: FaDatabase },
     { name: "AWS", icon: FaAws },
-    // { name: "Nginx", icon: FaNginx },
-    // { name: "Redis", icon: FaRedis },
     { name: "Git", icon: FaGitAlt },
     { name: "GitHub", icon: FaGithub },
     { name: "React", icon: FaReact },
   ];
 
   return (
-    <section className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-gray-100 p-6">
+    <section className="relative flex flex-col items-center justify-center min-h-screen bg-white p-6">
       <NetworkAnimation />
-
-      <h1 className="text-9xl font-bold mb-8 text-gray-900">Abhijeet Rana</h1>
-
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-6 max-w-3xl">
-        {skills.map((skill) => (
-          <div key={skill.name} className="flex flex-col items-center">
-            <skill.icon className="w-12 h-12 text-blue-600 mb-2" />
-            <span className="text-sm text-gray-600">{skill.name}</span>
-          </div>
-        ))}
-      </div>
+      <motion.div
+        className="relative z-10 mt-16" // Added mt-16 to account for navbar height
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+      >
+        <motion.h1
+          className="text-8xl font-bold mb-8 text-gray-800"
+          variants={itemVariants}
+        >
+          Abhijeet Rana
+        </motion.h1>
+        <motion.div
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 max-w-3xl"
+          variants={containerVariants}
+        >
+          {skills.map((skill) => (
+            <motion.div
+              key={skill.name}
+              className="flex flex-col items-center"
+              variants={itemVariants}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <motion.div
+                whileHover={{ rotate: 360 }}
+                transition={{ duration: 0.3 }}
+              >
+                <skill.icon className="w-12 h-12 text-blue-600 mb-2" />
+              </motion.div>
+              <span className="text-sm text-gray-600">{skill.name}</span>
+            </motion.div>
+          ))}
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
